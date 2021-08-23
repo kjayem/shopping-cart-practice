@@ -12,11 +12,13 @@ var indexRouter = require('./routes/index');
 
 var app = express();
 
-mongoose.connect('localhost:27017/shopping');
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect('mongodb://localhost:27017/shopping');
 
 // view engine setup
 app.engine('.hbs', expressHbs({
-  defaultLayout: 'layout', 
+  defaultLayout: 'layout',  
   extname: '.hbs'
 }));
 app.set('view engine', '.hbs');
