@@ -18,6 +18,7 @@ var app = express();
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect('mongodb://localhost:27017/shopping');
+require('./config/passport');
 
 // view engine setup
 app.engine('.hbs', expressHbs({
