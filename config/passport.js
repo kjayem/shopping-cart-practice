@@ -20,6 +20,19 @@ passport.use('local.signup', new LocalStrategy({
     passReqToCallback: true
 }, function(req, email, password, done) {
     User.findOne({'email': email}, function(err, user) {
+        //check if email and password is valid
+        req.checkBody('email', 'Invalid email').notEmpty().isEmail();
+        req.checkBody('password', 'Invalid password').notEmpty().isLength({min:4});
+        var errors = req.validationErrors();
+        //if email or password is not valid, assign errors into messages array
+        if (errors) {
+            var messages = [];
+            errors.forEach(function(error) {
+                messages.push(error.msg);
+            })
+            // output 'messages' through signup.hbs {{ each messages }}
+            return done(null, false, req.flash('error', messages))
+        }
         if (err) {
             return done(err);
         }
