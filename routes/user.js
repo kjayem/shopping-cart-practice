@@ -11,6 +11,12 @@ router.get('/profile', isLoggedIn, function(req, res, next) {
     res.render('user/profile');
   });
 
+// logout
+router.get('/logout', isLoggedIn, function(req, res, next) {
+    req.logout();
+    res.redirect('/');
+  })
+
 //checks if user is not logged in
 router.use('/', notLoggedIn, function(req, res, next) {
     next();
@@ -45,11 +51,6 @@ router.get('/signup', csrfProtection, function(req, res) {
     failureFlash: true
   }));
 
-// logout
-  router.get('/logout', function(req, res, next) {
-    req.logout();
-    res.redirect('/');
-  })
 
 
   module.exports = router;

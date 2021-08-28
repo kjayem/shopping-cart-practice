@@ -40,6 +40,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+  //login variable that will be available in all of our views
+  res.locals.login = req.isAuthenticated();
+  next();
+});
+
+// routes
 app.use('/user', userRoutes);
 app.use('/', indexRouter);
 
