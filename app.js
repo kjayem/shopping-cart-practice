@@ -11,6 +11,8 @@ var session = require('express-session');
 var passport = require('passport');
 var flash = require('connect-flash');
 var validator = require('express-validator');
+// after session package
+var MongoStore = require('connect-mongo')(session);
 
 var indexRouter = require('./routes/index');
 var userRoutes = require('./routes/user');
@@ -34,15 +36,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(validator());
 app.use(cookieParser());
-app.use(session({secret: 'mysupersecret', resave: false, saveUninitialized: false}));
+app.use(session({
+  secret: 'mysupersecret', 
+  resave: false, 
+  saveUninitialized: false,
+  // making sure no new connection is open vv
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  // how long should my sessions live in milliseconds (180minutes here) vv
+  cookie: { maxAge: 180 * 60 * 1000 }
+}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
-  //login variable that will be available in all of our views
+  //login global variable that will be available in all of our views
   res.locals.login = req.isAuthenticated();
+  // makes sure I can access session in all my templates
+  res.locals.session = req.session;
   next();
 });
 

@@ -17,15 +17,10 @@ router.get('/logout', isLoggedIn, function(req, res, next) {
     res.redirect('/');
   })
 
-//checks if user is not logged in
+//filter for checking if user is not logged in. all routes after this middleware is also reachable by users not logged in.
 router.use('/', notLoggedIn, function(req, res, next) {
     next();
 })
-
-
-
-
-
 
 router.get('/signup', csrfProtection, function(req, res) {
     var messages = req.flash('error');
