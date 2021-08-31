@@ -1,7 +1,8 @@
 module.exports = function Cart(oldCart) {
-    this.items = oldCart.items;
-    this.totalQty = oldCart.totalQty;
-    this.totalPrice = oldCart.totalPrice;
+    // if items, totalQty, totalPrice is undefined, set them to 0
+    this.items = oldCart.items || {};
+    this.totalQty = oldCart.totalQty || 0;
+    this.totalPrice = oldCart.totalPrice || 0;
 
     this.add = function(item, id) {
         //check if this product already exists in the cart and if so, just update the qty.
@@ -13,7 +14,7 @@ module.exports = function Cart(oldCart) {
         storedItem.qty++;
         storedItem.price = storedItem.item.price * storedItem.qty;
         this.totalQty++;
-        this.totalPrice += storedItem.price;
+        this.totalPrice += storedItem.item.price;
     }
 
     // outputs the list of the products in the cart
